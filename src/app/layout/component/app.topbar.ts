@@ -33,7 +33,7 @@ import { LayoutService } from '../service/layout.service';
                         />
                     </g>
                 </svg>
-                <span>SAKAI</span>
+                <span>dashboard-ng-ai</span>
             </a>
         </div>
 
