@@ -1,4 +1,12 @@
-# Sakai19
+# Dashboard Demo with Angular + AI
+
+The main goal with this repository is to demo various kinds of functionality. See the roadmap below for the planned updates. The UI code is based on Angular starting from the Sakai template made by PrimeNG.
+
+DISCLAIMER: The is no warranty express or implied with this code. Do not deploy this code to a production environment.
+
+
+
+## Sakai19
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.5.
 
