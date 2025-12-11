@@ -1,0 +1,42 @@
+name: Deploy Angular to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main # Trigger the workflow on pushes to the main branch
+  workflow_dispatch: # Allows manual trigger from the Actions tab
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pages: write # Required to deploy to GitHub Pages
+      id-token: write # Required for deployment authentication
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Use a supported Node.js version
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Angular Project
+        # Use your specific build command, which uses the 'production' configuration defined in angular.json
+        run: npm run build -- --configuration production --base-href /dashboard-ng-ai/
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Replace 'YOUR_PROJECT_NAME' with the actual output folder name, e.g., 'my-angular-app'
+          path: dist/dashboard-ng-ai/browser
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
