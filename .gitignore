@@ -37,7 +37,7 @@ yarn-error.log
 testem.log
 /typings
 .vscode
-.env
+*.env
 
 # System files
 .DS_Store
