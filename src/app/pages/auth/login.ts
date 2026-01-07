@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -7,6 +7,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
 import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
+import { AuthService } from '@auth0/auth0-angular';
 
 @Component({
     selector: 'app-login',
@@ -54,7 +55,7 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
                                 </div>
                                 <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Forgot password?</span>
                             </div>
-                            <p-button label="Sign In" styleClass="w-full" routerLink="/"></p-button>
+                            <p-button label="Sign In" styleClass="w-full" (click)="login()"></p-button>
                         </div>
                     </div>
                 </div>
@@ -64,8 +65,11 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
 })
 export class Login {
     email: string = '';
-
     password: string = '';
-
     checked: boolean = false;
+    private auth = inject(AuthService);
+
+    login(): void {
+        this.auth.loginWithRedirect();
+    }
 }
