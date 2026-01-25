@@ -1,24 +1,48 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule, FormControl } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { ButtonModule } from 'primeng/button';
 import { WeatherService } from '../../services/weather.service';
 import { CurrentWeather } from '../../models/current-weather';
-import { MapboxResponse, Feature } from '../../models/reverse-geocoding';
+import { debounceTime, distinctUntilChanged, switchMap, filter } from 'rxjs/operators';
 
 @Component({
     selector: 'app-weather',
     standalone: true,
-    imports: [CommonModule, FormsModule, InputTextModule, IconFieldModule, InputIconModule, ButtonModule],
+    imports: [
+        CommonModule,
+        FormsModule,
+        InputTextModule,
+        IconFieldModule,
+        InputIconModule,
+        ButtonModule,
+        ReactiveFormsModule,
+    ],
     template: `
     <div class="card">
         <div class="font-semibold text-xl mb-4">Weather</div>
 
         <div class="flex items-center gap-2 mb-4">
-            <input pInputText type="text" placeholder="Enter location" [(ngModel)]="locationText" />
+            <div class="search-container" style="position: relative; width: 300px;">
+              <input pInputText
+                type="text"
+                [formControl]="searchControl"
+                placeholder="Start typing an address..."
+                style="width: 100%; padding: 8px;"
+              />
+
+              <ul *ngIf="results.length > 0"
+                  style="position: absolute; background: white; border: 1px solid #ccc; list-style: none; padding: 0; margin: 0; width: 100%; z-index: 10;">
+                <li *ngFor="let loc of results"
+                    (click)="selectAddress(loc)"
+                    style="padding: 8px; cursor: pointer; border-bottom: 1px solid #eee; color: #000;">
+                  {{ loc.properties.full_address }}
+                </li>
+              </ul>
+            </div>
             <p-button type="button" label="Go" (click)="go()" [loading]="isLoading"></p-button>
         </div>
 
@@ -114,24 +138,46 @@ import { MapboxResponse, Feature } from '../../models/reverse-geocoding';
     </div>
     `
 })
-export class Weather {
+export class Weather implements OnInit {
     locationText: string = '';
     isLoading: boolean = false;
-
     // lat/lon from browser or geocoding
     lat: number | null = null;
     lon: number | null = null;
-
     // map center and zoom
     mapLat = 39.8283; // center USA
     mapLon = -98.5795;
     mapZoom = 4; // default zoom for whole USA
-
     error: string | null = null;
-
     currentWeather: CurrentWeather | null = null;
+    searchControl = new FormControl('');
+    results: any[] = [];
+    coords: number[] | null = null;
 
-    constructor(private weatherService: WeatherService) {}
+    constructor(private weatherService: WeatherService) { }
+
+    ngOnInit() {
+        this.isLoading = true;
+        this.searchControl.valueChanges.pipe(
+            filter(query => !!query && query.length > 2), // Only search if > 2 characters
+            debounceTime(400),                            // Wait for 400ms pause
+            distinctUntilChanged(),                       // Only if the value changed
+            switchMap(query => this.searchAddress(query!)) // Switch to new search, cancel old
+        ).subscribe(data => {
+            console.log('Search results: ', data);
+            this.results = data.features;
+            this.isLoading = false;
+        });
+    }
+
+    selectAddress(loc: any) {
+        this.isLoading = true;
+        this.searchControl.setValue(loc.properties.full_address, { emitEvent: false });
+        this.results = [];
+        this.coords = loc.geometry.coordinates;
+        console.log('Selected Coordinates:', loc.geometry.coordinates); // [longitude, latitude]
+        this.isLoading = false;
+    }
 
     get mapUrl() {
         // Use RainViewer map which supports loc=lat,lon,zoom
@@ -157,9 +203,9 @@ export class Weather {
                     const geo = await this.reverseGeocode(this.lat, this.lon);
                     console.log('Reverse geocode result: ', geo?.location.features);
                     this.currentWeather = await this.weatherService.getCurrentWeather(this.lat, this.lon);
-                    this.locationText = geo.location.features.length > 0
+                    /*this.locationText = geo.location.features.length > 0
                         ? geo.location.features.find((feature: Feature) => feature.id.startsWith('place')).place_name
-                        : `Lat: ${this.lat}, Lon: ${this.lon}`;
+                        : `Lat: ${this.lat}, Lon: ${this.lon}`;*/
                     this.isLoading = false;
                 } catch (e) {
                     this.error = 'Failed to reverse geocode location';
@@ -177,6 +223,10 @@ export class Weather {
         return await this.weatherService.reverseGeocode(lat, lon);
     }
 
+    async searchAddress(query: string) {
+        return await this.weatherService.searchAddress(query);
+    }
+
     async geocode(query: string) {
         const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=jsonv2&limit=1`;
         const res = await fetch(url);
@@ -192,7 +242,10 @@ export class Weather {
         this.error = null;
         this.currentWeather = null;
         try {
-            await this.useBrowserLocation();
+            //await this.useBrowserLocation();
+            if (this.coords) {
+                this.currentWeather = await this.weatherService.getCurrentWeather(this.coords[1], this.coords[0]);
+            }
         } catch (e) {
             this.error = 'Failed to get map for location';
         }

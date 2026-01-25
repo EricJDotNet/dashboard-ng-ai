@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { CurrentWeather } from '../models/current-weather';
-import { MapboxResponse } from '../models/reverse-geocoding';
+import { MapboxV6Response } from '../models/reverse-geocoding';
 
 export interface ReverseGeocodeResult {
     displayName?: string;
@@ -51,5 +51,11 @@ export class WeatherService {
         const base = environment.weatherApiBaseUrl.replace(/\/+$/, '');
         const url = `/api/weather/current?lat=${lat}&lon=${lon}`;
         return firstValueFrom(this.http.get<CurrentWeather>(url));
+    }
+
+    searchAddress(query: string): Promise<MapboxV6Response> {
+        const base = environment.weatherApiBaseUrl.replace(/\/+$/, '');
+        const url = `/api/weather/search?query=${query}`;
+        return firstValueFrom(this.http.get<any>(url));
     }
 }
