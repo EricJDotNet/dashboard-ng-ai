@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ChartModule } from 'primeng/chart';
 import { InputTextModule } from 'primeng/inputtext';
@@ -26,7 +26,7 @@ import { StockTickerService } from '../../services/stockticker.service';
         </div>
     `
 })
-export class StockTicker {
+export class StockTicker implements OnInit {
     symbol = '';
     validSymbol = false;
     loading = false;

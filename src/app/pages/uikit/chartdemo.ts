@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ChartModule } from 'primeng/chart';
 import { FluidModule } from 'primeng/fluid';
 import { debounceTime, Subscription } from 'rxjs';
@@ -50,7 +50,7 @@ import { LayoutService } from '../../layout/service/layout.service';
         </p-fluid>
     `
 })
-export class ChartDemo {
+export class ChartDemo implements OnInit, OnDestroy {
     lineData: any;
 
     barData: any;
