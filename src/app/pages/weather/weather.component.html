@@ -1,0 +1,128 @@
+<div class="card">
+    <div class="font-semibold text-xl mb-4">Weather</div>
+
+    <div class="flex items-center gap-2 mb-4">
+        <div class="search-container" style="position: relative; width: 300px;">
+            <input pInputText
+                   type="text"
+                   [formControl]="searchControl"
+                   placeholder="Start typing an address..."
+                   style="width: 100%; padding: 8px;" />
+
+            <ul *ngIf="results.length > 0"
+                style="position: absolute; background: white; border: 1px solid #ccc; list-style: none; padding: 0; margin: 0; width: 100%; z-index: 10;">
+                <li *ngFor="let loc of results"
+                    (click)="selectAddress(loc)"
+                    style="padding: 8px; cursor: pointer; border-bottom: 1px solid #eee; color: #000;">
+                    {{ loc.properties.full_address }}
+                </li>
+            </ul>
+        </div>
+        <p-button type="button" label="Go" (click)="go()" [loading]="isLoading"></p-button>
+    </div>
+
+    <div *ngIf="currentWeather" class="card mt-4">
+        <div class="font-semibold mb-2">Current Weather</div>
+        <hr />
+        <form class="grid grid-cols-2 gap-4">
+            <div>
+                <label class="block text-sm">
+                    Timestamp (dt)
+                    <input pInputText type="number" [(ngModel)]="currentWeather.dt" name="cw_dt" />
+                </label>
+            </div>
+            <div>
+                <label class="block text-sm">
+                    Sunrise
+                    <input pInputText type="number" [(ngModel)]="currentWeather.sunrise" name="cw_sunrise" />
+                </label>
+            </div>
+
+            <div>
+                <label class="block text-sm">
+                    Sunset
+                    <input pInputText type="number" [(ngModel)]="currentWeather.sunset" name="cw_sunset" />
+                </label>
+            </div>
+            <div>
+                <label class="block text-sm">
+                    Temperature (temp)
+                    <input pInputText type="number" step="any" [(ngModel)]="currentWeather.temp" name="cw_temp" />
+                </label>
+            </div>
+
+            <div>
+                <label class="block text-sm">
+                    Feels Like
+                    <input pInputText type="number" step="any" [(ngModel)]="currentWeather.feelsLike" name="cw_feelsLike" />
+                </label>
+            </div>
+            <div>
+                <label class="block text-sm">
+                    Pressure
+                    <input pInputText type="number" [(ngModel)]="currentWeather.pressure" name="cw_pressure" />
+                </label>
+            </div>
+
+            <div>
+                <label class="block text-sm">
+                    Humidity
+                    <input pInputText type="number" [(ngModel)]="currentWeather.humidity" name="cw_humidity" />
+                </label>
+            </div>
+            <div>
+                <label class="block text-sm">
+                    Dew Point
+                    <input pInputText type="number" step="any" [(ngModel)]="currentWeather.dewPoint" name="cw_dewPoint" />
+                </label>
+            </div>
+
+            <div>
+                <label class="block text-sm">
+                    UV Index (uvi)
+                    <input pInputText type="number" step="any" [(ngModel)]="currentWeather.uvi" name="cw_uvi" />
+                </label>
+            </div>
+            <div>
+                <label class="block text-sm">
+                    Clouds
+                    <input pInputText type="number" [(ngModel)]="currentWeather.clouds" name="cw_clouds" />
+                </label>
+            </div>
+
+            <div>
+                <label class="block text-sm">
+                    Visibility
+                    <input pInputText type="number" [(ngModel)]="currentWeather.visibility" name="cw_visibility" />
+                </label>
+            </div>
+            <div>
+                <label class="block text-sm">
+                    Wind Speed
+                    <input pInputText type="number" step="any" [(ngModel)]="currentWeather.windSpeed" name="cw_windSpeed" />
+                </label>
+            </div>
+
+            <div>
+                <label class="block text-sm">
+                    Wind Degree
+                    <input pInputText type="number" [(ngModel)]="currentWeather.windDeg" name="cw_windDeg" />
+                </label>
+            </div>
+            <div>
+                <label class="block text-sm">
+                    Wind Gust
+                    <input pInputText type="number" step="any" [(ngModel)]="currentWeather.windGust" name="cw_windGust" />
+                </label>
+            </div>
+
+            <div class="col-span-2">
+                <label class="block text-sm">
+                    Weather (JSON)
+                    <textarea rows="4" class="w-full p-2 border rounded" [value]="currentWeather.weather | json" disabled></textarea>
+                </label>
+            </div>
+            <div *ngIf="error" class="text-red-600 mt-3">{{ error }}</div>
+        </form>
+    </div>
+</div>
