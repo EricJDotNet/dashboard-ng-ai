@@ -152,7 +152,7 @@ interface ExportColumn {
                     <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.image" class="block m-auto pb-4" *ngIf="product.image" />
                     <div>
                         <label for="name" class="block font-bold mb-3">Name</label>
-                        <input type="text" pInputText id="name" [(ngModel)]="product.name" required autofocus fluid />
+                        <input type="text" pInputText id="name" [(ngModel)]="product.name" required fluid />
                         <small class="text-red-500" *ngIf="submitted && !product.name">Name is required.</small>
                     </div>
                     <div>
@@ -211,7 +211,7 @@ interface ExportColumn {
     providers: [MessageService, ProductService, ConfirmationService]
 })
 export class Crud implements OnInit {
-    productDialog: boolean = false;
+    productDialog = false;
 
     products = signal<Product[]>([]);
 
@@ -219,7 +219,7 @@ export class Crud implements OnInit {
 
     selectedProducts!: Product[] | null;
 
-    submitted: boolean = false;
+    submitted = false;
 
     statuses!: any[];
 
@@ -335,8 +335,8 @@ export class Crud implements OnInit {
 
     createId(): string {
         let id = '';
-        var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        for (var i = 0; i < 5; i++) {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        for (let i = 0; i < 5; i++) {
             id += chars.charAt(Math.floor(Math.random() * chars.length));
         }
         return id;
@@ -357,7 +357,7 @@ export class Crud implements OnInit {
 
     saveProduct() {
         this.submitted = true;
-        let _products = this.products();
+        const _products = this.products();
         if (this.product.name?.trim()) {
             if (this.product.id) {
                 _products[this.findIndexById(this.product.id)] = this.product;
