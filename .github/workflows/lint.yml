@@ -22,7 +22,6 @@ jobs:
 
       - name: Install Dependencies
         run: npm ci
-        working-directory: ./dashboard-net-ai
 
       - name: Run Lint
         run: npm run lint
