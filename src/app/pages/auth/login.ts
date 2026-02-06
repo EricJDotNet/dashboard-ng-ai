@@ -64,9 +64,9 @@ import { AuthService } from '@auth0/auth0-angular';
     `
 })
 export class Login {
-    email: string = '';
-    password: string = '';
-    checked: boolean = false;
+    email = '';
+    password = '';
+    checked = false;
     private auth = inject(AuthService);
 
     login(): void {

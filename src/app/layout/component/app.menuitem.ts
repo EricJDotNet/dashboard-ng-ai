@@ -1,4 +1,4 @@
-import { Component, HostBinding, Input } from '@angular/core';
+import { Component, HostBinding, Input, OnInit, OnDestroy } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Subscription } from 'rxjs';
@@ -69,7 +69,7 @@ import { LayoutService } from '../service/layout.service';
     ],
     providers: [LayoutService]
 })
-export class AppMenuitem {
+export class AppMenuitem implements OnInit, OnDestroy {
     @Input() item!: MenuItem;
 
     @Input() index!: number;
@@ -84,7 +84,7 @@ export class AppMenuitem {
 
     menuResetSubscription: Subscription;
 
-    key: string = '';
+    key = '';
 
     constructor(
         public router: Router,
@@ -122,7 +122,7 @@ export class AppMenuitem {
     }
 
     updateActiveStateFromRoute() {
-        let activeRoute = this.router.isActive(this.item.routerLink[0], { paths: 'exact', queryParams: 'ignored', matrixParams: 'ignored', fragment: 'ignored' });
+        const activeRoute = this.router.isActive(this.item.routerLink[0], { paths: 'exact', queryParams: 'ignored', matrixParams: 'ignored', fragment: 'ignored' });
 
         if (activeRoute) {
             this.layoutService.onMenuStateChange({ key: this.key, routeEvent: true });

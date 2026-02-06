@@ -25,8 +25,8 @@ import { debounceTime, distinctUntilChanged, switchMap, filter } from 'rxjs/oper
     styleUrls: ['./weather.component.css']
 })
 export class Weather implements OnInit {
-    locationText: string = '';
-    isLoading: boolean = false;
+    locationText = '';
+    isLoading = false;
     // lat/lon from browser or geocoding
     lat: number | null = null;
     lon: number | null = null;

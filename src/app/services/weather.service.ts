@@ -37,7 +37,7 @@ export class WeatherService {
      * Calls the backend .NET API to get daily weather statistics for the given coordinates.
      * Expected backend endpoint: GET {weatherApiBaseUrl}/api/weather/daily?lat={lat}&lon={lon}&days={days}
      */
-    getDailyStats(lat: number, lon: number, days: number = 7): Promise<DailyWeatherStats[]> {
+    getDailyStats(lat: number, lon: number, days = 7): Promise<DailyWeatherStats[]> {
         const base = environment.weatherApiBaseUrl.replace(/\/+$/, '');
         const url = `/api/weather/daily?lat=${lat}&lon=${lon}&days=${days}`;
         return firstValueFrom(this.http.get<DailyWeatherStats[]>(url));
