@@ -1,0 +1,15 @@
+{
+    "/finnhub/*": {
+        "target": "https://finnhub.io",
+        "secure": true,
+        "changeOrigin": true,
+        "pathRewrite": { "^/finnhub": "" },
+        "logLevel": "warn"
+    },
+    "/api": {
+        "target": "https://localhost:44365/",
+        "secure": false,
+        "changeOrigin": true,
+        "logLevel": "warn"
+    }
+}

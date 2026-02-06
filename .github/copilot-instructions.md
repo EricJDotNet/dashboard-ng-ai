@@ -39,6 +39,8 @@ Purpose: quick, actionable rules to help an AI coding agent be productive in thi
 - **When changing routing or providers:**
   - Add new app-wide providers in [src/app.config.ts](src/app.config.ts).
   - Update top-level routes in [src/app.routes.ts](src/app.routes.ts). Use existing lazy-load pattern for large page sets.
+  - Place new or shared services under [src/app/services](src/app/services).
+  - Place model interfaces/types under `src/app/models`.
 
 - **Files and examples to reference for common tasks:**
   - bootstrap & providers: [src/main.ts](src/main.ts), [src/app.config.ts](src/app.config.ts)

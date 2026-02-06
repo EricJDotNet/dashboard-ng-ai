@@ -14,13 +14,5 @@ export const appConfig: ApplicationConfig = {
         provideHttpClient(withFetch()),
         provideAnimationsAsync(),
         providePrimeNG({ theme: { preset: Aura, options: { darkModeSelector: '.app-dark' } } }),
-        provideAuth0({
-            domain: environment.auth0.domain,
-            clientId: environment.auth0.clientId,
-            authorizationParams: {
-                redirect_uri: window.location.origin,
-                audience: environment.auth0.audience,
-            }
-        })
     ]
 };

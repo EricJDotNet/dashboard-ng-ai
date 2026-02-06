@@ -61,6 +61,21 @@ export class AppMenu {
                         routerLink: ['/pages/crud']
                     },
                     {
+                        label: 'Stock Ticker',
+                        icon: 'pi pi-fw pi-chart-line',
+                        routerLink: ['/pages/stockticker']
+                    },
+                    {
+                        label: 'Location Data',
+                        icon: 'pi pi-fw pi-map-marker',
+                        routerLink: ['/pages/geo']
+                    },
+                    {
+                        label: 'Weather',
+                        icon: 'pi pi-fw pi-cloud',
+                        routerLink: ['/pages/weather']
+                    },
+                    {
                         label: 'Not Found',
                         icon: 'pi pi-fw pi-exclamation-circle',
                         routerLink: ['/pages/notfound']
